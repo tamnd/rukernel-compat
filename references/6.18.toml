@@ -1,0 +1,8 @@
+# The second reference: the newest longterm release. A boot option selects its ABI on rukernel
+# (`rukernel.abi=6.18`), per spec/17-upstream-tracking.md section 17.1.
+
+version = "6.18"
+tag = "v6.18"
+role = "longterm"
+source = "https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git"
+config = "defconfig plus the fragments in configs/6.18/"

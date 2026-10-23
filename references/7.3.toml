@@ -1,0 +1,11 @@
+# The primary reference: the newest Linux release, per spec/18-rukernel-compat.md section 18.1.
+#
+# The harness builds this kernel from the tag with the configuration in `config`. The milestone R0
+# issue for the reference builder adds the tarball checksum and the builder image digest.
+
+version = "7.3"
+tag = "v7.3"
+role = "primary"
+released = "2026-10-18"
+source = "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git"
+config = "defconfig plus the fragments in configs/7.3/"

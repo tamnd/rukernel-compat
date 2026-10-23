@@ -1,0 +1,6 @@
+[alias]
+xtask = "run --quiet --package xtask --"
+
+# The harness binary that `cargo xtask ci` runs with `check`.
+[env]
+HARNESS_BIN = "rkc"

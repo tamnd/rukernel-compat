@@ -1,0 +1,5 @@
+# The owner reviews each change to the reference data and to the CI.
+* @tamnd
+/references/ @tamnd
+/register/ @tamnd
+/.github/ @tamnd

@@ -1,0 +1,10 @@
+# Tests that give different results on the same kernel, per spec/18-rukernel-compat.md section 18.5.
+#
+# A test goes here after it gives two different results on the reference kernel. The harness runs
+# it and does not count it. Each entry has an issue.
+#
+# [[untrustworthy]]
+# id = "ltp-sched-bar02"
+# test = "ltp/sched/bar02"
+# reason = "The test depends on the time of a timer interrupt."
+# issue = "tamnd/rukernel-compat#2"

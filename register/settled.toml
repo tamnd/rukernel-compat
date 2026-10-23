@@ -1,0 +1,11 @@
+# Differences from Linux that are correct, per spec/18-rukernel-compat.md section 18.5.
+#
+# Each entry gives the result of each kernel and the reason. Example: the value of a field that
+# names the kernel, such as the compiler in /proc/version.
+#
+# [[settled]]
+# id = "proc-version-compiler"
+# test = "proc/version"
+# linux = "gcc version 15.2.0"
+# rukernel = "rustc 1.98.0"
+# reason = "The file names the compiler that built the kernel. spec/17-upstream-tracking.md section 17.4."

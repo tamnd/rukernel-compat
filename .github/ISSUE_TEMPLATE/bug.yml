@@ -1,0 +1,30 @@
+name: Bug in the harness
+description: rkc crashes, gives a wrong result or reports a false difference.
+labels: ["kind/bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: Give the command and its output.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: The output of `rkc version`, or the commit.
+    validations:
+      required: true
+  - type: input
+    id: host
+    attributes:
+      label: Host
+      description: The operating system and the architecture of the host.

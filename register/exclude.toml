@@ -1,0 +1,10 @@
+# Tests that the harness does not run, per spec/18-rukernel-compat.md section 18.5.
+#
+# Each entry has an id, the test, the reason and an issue. An entry without an issue is an error.
+# Example:
+#
+# [[exclude]]
+# id = "ltp-syscalls-foo01"
+# test = "ltp/syscalls/foo01"
+# reason = "The test needs a device that the reference VM does not have."
+# issue = "tamnd/rukernel-compat#1"

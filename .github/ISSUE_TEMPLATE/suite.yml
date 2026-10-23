@@ -1,0 +1,26 @@
+name: New suite or corpus entry
+description: Ask for a test suite, a program or an image to go into the differential run.
+labels: ["kind/feature", "area/testing"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Suite or program
+      description: The name, the version and the upstream URL.
+    validations:
+      required: true
+  - type: dropdown
+    id: level
+    attributes:
+      label: Level
+      description: The level from spec/18-rukernel-compat.md section 18.2.
+      options: [L1 ABI layout, L2 system call suites, L3 subsystem suites, L4 programs and images, L5 foreign programs]
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why it matters
+      description: Tell which programs or users depend on the behavior that this suite tests.
+    validations:
+      required: true
