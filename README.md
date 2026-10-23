@@ -13,8 +13,8 @@ The harness reports five levels. [spec/18-rukernel-compat.md](https://github.com
 | Level | What it compares |
 |---|---|
 | L1 | The generated ABI: system call numbers, structure layouts, constants and ioctl numbers |
-| L2 | System call traces of small programs, call by call |
-| L3 | The test suites: gVisor, LTP, kselftest, fstests, liburing, CRIU and others |
+| L2 | The static floor, then the system call suites: gVisor, LTP syscalls and the core kselftest collections |
+| L3 | The subsystem suites: fstests, blktests, LTP net and mm, kselftest net and bpf, and CRIU |
 | L4 | Distribution and container images: boot, smoke tests and the services of each image |
 | L5 | Real applications: games under Proton, databases, browsers, IDEs and builds |
 
