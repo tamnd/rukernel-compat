@@ -7,6 +7,7 @@
 #![forbid(unsafe_code)]
 
 mod data;
+mod l1;
 
 use std::fs;
 use std::path::Path;
@@ -19,11 +20,11 @@ usage: rkc <command>
 
 commands that work now:
   check     examine the references and the register for errors
+  l1        compare the generated ABI with the reference headers
   version   show the version of rkc
   help      show this text
 
 commands that come with the milestones of tamnd/rukernel:
-  l1        compare the generated ABI with the reference headers (R0)
   run       run a suite on rukernel and on the reference (R1)
   diff      compare two runs and show each difference (R1)
   report    write the compat levels and the coverage table (R2)";
@@ -60,7 +61,8 @@ fn main() -> ExitCode {
             println!("{USAGE}");
             ExitCode::SUCCESS
         }
-        "l1" | "run" | "diff" | "report" => {
+        "l1" => l1(),
+        "run" | "diff" | "report" => {
             eprintln!("rkc {command}: this command is not in this version. Refer to `rkc help`.");
             ExitCode::from(2)
         }
@@ -69,6 +71,28 @@ fn main() -> ExitCode {
             ExitCode::from(2)
         }
     }
+}
+
+/// Runs `rkc l1 --reference VERSION [--abi DIR] [--headers DIR] [--arch ARCH]...`.
+fn l1() -> ExitCode {
+    let args: Vec<String> = std::env::args().skip(2).collect();
+    let result = l1::Options::parse(&args).and_then(|o| l1::run(Path::new("."), &o));
+    let reports = match result {
+        Ok(reports) => reports,
+        Err(message) => {
+            eprintln!("rkc l1: {message}");
+            return ExitCode::from(2);
+        }
+    };
+    let mut failed = false;
+    for r in &reports {
+        println!("rkc l1: {}: {} values, {} differences", r.arch, r.checked, r.differences.len());
+        for d in &r.differences {
+            println!("  {d}");
+        }
+        failed |= !r.differences.is_empty();
+    }
+    if failed { ExitCode::FAILURE } else { ExitCode::SUCCESS }
 }
 
 /// Examines the data files under `root`. Gives the number of files, or each error.

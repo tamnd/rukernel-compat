@@ -4,7 +4,7 @@ rukernel-compat is the differential test harness of [rukernel](https://github.co
 
 The test oracle is a real Linux kernel. It is not a man page and it is not a standard. If Linux and rukernel give different results, rukernel has a bug. The only exceptions are the entries in the register, and each entry gives its reason.
 
-The project is at milestone R0. The harness CLI, `rkc`, examines the data files. The suite adapters come with the milestones.
+The project is at milestone R0. The harness CLI, `rkc`, examines the data files and runs L1. The suite adapters come with the milestones.
 
 ## The compat levels
 
@@ -44,10 +44,13 @@ You need `rustup`. The toolchain file installs the correct Rust version.
 ```
 cargo run --bin rkc -- help
 cargo run --bin rkc -- check
+cargo run --bin rkc -- l1 --reference 7.3 --abi ../rukernel/abi/7.3
 cargo xtask ci
 ```
 
 `rkc check` examines the references and the register. An entry without an issue or a reason is an error.
+
+`rkc l1` compares the generated ABI in a rukernel tree with the uAPI headers of the reference. It downloads the reference tarball to `~/.cache/rkc` (or to `RKC_CACHE`), checks its SHA-256 and runs `make headers_install` for each architecture. Then clang compiles one `_Static_assert` for each value of the generated ABI. The command shows each difference, and it exits with 1 if there is a difference. It needs `curl`, `tar`, GNU make and clang. On macOS, install GNU make as `gmake`. Use `--headers DIR` to give headers that you installed, and `--arch` to compare one architecture.
 
 ## Repository layout
 

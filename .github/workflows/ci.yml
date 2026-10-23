@@ -135,12 +135,45 @@ jobs:
           persist-credentials: false
       - uses: crate-ci/typos@7f9d0819ca1c008ade73f4b41fa9d258d48f605b # v1.51.1
 
+  # L1, the ABI floor. The generated ABI of tamnd/rukernel on main must agree with the uAPI headers
+  # of the reference. The job builds the headers from the reference tarball, so it takes some
+  # minutes. The tarball stays in the cache.
+  l1:
+    name: l1 against the reference
+    needs: quick
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: tamnd/rukernel
+          path: rukernel
+          persist-credentials: false
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/rkc/*.tar.xz
+          key: rkc-tarball-${{ hashFiles('references/*.toml') }}
+          restore-keys: rkc-tarball-
+      # The probes compile with clang. The runner image has it.
+      - name: clang version
+        run: clang --version
+      - name: rkc l1
+        run: cargo run --quiet --bin rkc -- l1 --reference 7.3 --abi rukernel/abi/7.3
+
   # The ruleset on main requires one check with the name `ci`. This job is that check. Thus a new
   # job in this file does not need a change to the ruleset.
   ci:
     name: ci
     if: always()
-    needs: [quick, test, docs, deny, typos]
+    needs: [quick, test, docs, deny, typos, l1]
     runs-on: ubuntu-24.04
     permissions: {}
     steps:
