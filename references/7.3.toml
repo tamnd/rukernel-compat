@@ -8,4 +8,7 @@ tag = "v7.3"
 role = "primary"
 released = "2026-10-18"
 source = "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git"
+tarball = "https://cdn.kernel.org/pub/linux/kernel/v7.x/linux-7.3.tar.xz"
+# The SHA-256 of the tarball, from sha256sums.asc on kernel.org. rkc l1 checks it.
+sha256 = "87363c24f10e06321eb362765521094e94471f6bff8bce2d6b3e40f39f004953"
 config = "defconfig plus the fragments in configs/7.3/"
