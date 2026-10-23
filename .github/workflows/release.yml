@@ -105,5 +105,41 @@ jobs:
           TAG: ${{ github.ref_name }}
         run: |
           set -euo pipefail
-          gh release create "$TAG" out/* --repo "$GITHUB_REPOSITORY" \
-            --verify-tag --generate-notes --title "rkc $TAG"
+          # A maintainer can publish the release notes before this job runs. Then the job only
+          # adds the files to that release.
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            gh release upload "$TAG" out/* --repo "$GITHUB_REPOSITORY" --clobber
+          else
+            gh release create "$TAG" out/* --repo "$GITHUB_REPOSITORY" \
+              --verify-tag --generate-notes --title "rkc $TAG"
+          fi
+
+  # The crate goes to crates.io after the build passes on each target. The job uses the environment
+  # `crates-io`, which only `v*` tags can use. The secret CARGO_REGISTRY_TOKEN in that environment is
+  # a crates.io token with the publish-new and publish-update scopes. Without the secret, the job
+  # writes a warning and publishes nothing. The script obeys the crates.io rate limits.
+  crates:
+    name: publish to crates.io
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    environment: crates-io
+    permissions:
+      contents: read
+    steps:
+      - uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: publish the crate
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$CARGO_REGISTRY_TOKEN" ]; then
+            echo "::warning::the environment crates-io has no CARGO_REGISTRY_TOKEN, so no crate is published"
+            exit 0
+          fi
+          .github/scripts/publish-crates.sh rkc
