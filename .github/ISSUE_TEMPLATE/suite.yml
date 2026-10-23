@@ -14,7 +14,7 @@ body:
     attributes:
       label: Level
       description: The level from spec/18-rukernel-compat.md section 18.2.
-      options: [L1 ABI layout, L2 system call suites, L3 subsystem suites, L4 programs and images, L5 foreign programs]
+      options: [L1 the ABI floor, L2 system call suites, L3 subsystem suites, L4 distribution and container images, L5 real applications]
     validations:
       required: true
   - type: textarea
