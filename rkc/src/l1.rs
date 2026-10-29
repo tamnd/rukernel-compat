@@ -393,6 +393,10 @@ const LAYOUT_HEADERS: &[&str] = &[
     "linux/capability.h",
     "asm/termbits.h",
     "asm/termios.h",
+    "linux/timex.h",
+    "linux/mount.h",
+    "linux/fanotify.h",
+    "linux/signalfd.h",
 ];
 
 /// Compares the size, the alignment, and the offset and the size of each field of each structure.
