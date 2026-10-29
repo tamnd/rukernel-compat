@@ -4,6 +4,11 @@ This file records each release. The format follows [Keep a Changelog](https://ke
 
 ## Unreleased
 
+### Fixed
+
+- `rkc l1` includes linux/timex.h, linux/mount.h, linux/fanotify.h and linux/signalfd.h for the layout check. Before, it did not find `struct __kernel_timex`, `struct statmount`, `struct fanotify_event_metadata` and `struct signalfd_siginfo`, and gave 288 false differences on each architecture.
+
+
 ### Added
 
 - The release workflow publishes `rkc` to crates.io. The publish script obeys the crates.io rate limits.
